@@ -3,17 +3,7 @@ import UIKit
 
 class TodoListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        
-        cell.textLabel?.text = "Задача №\(indexPath.row)"
-            
-        return cell
-    }
+    private let fileCache = FileCache()
     
 
     override func viewDidLoad() {
@@ -23,7 +13,28 @@ class TodoListViewController: UIViewController, UITableViewDataSource, UITableVi
         setupHierarchy()
         setupConstraits()
 
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(TodoTableViewCell.self, forCellReuseIdentifier: "cell")
+        
+        let task = TodoItem(text: "Покушать", importance: .high, deadline: Date(timeIntervalSince1970: 1300000000), chandgedAt: nil)
+        let task2 = TodoItem(text: "Покушать2", importance: .high, deadline: Date(timeIntervalSince1970: 1300000000), isComplete: true, chandgedAt: nil)
+        fileCache.add(item: task)
+        fileCache.add(item: task2)
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return fileCache.items.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+       guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? TodoTableViewCell else {
+            return UITableViewCell()
+        }
+        let tasks = Array(fileCache.items.values)
+        let task = tasks[indexPath.row]
+        
+        cell.configure(with: task)
+            
+        return cell
     }
     
     private let tableView: UITableView = {
