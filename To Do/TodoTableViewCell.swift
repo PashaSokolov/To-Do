@@ -35,7 +35,7 @@ class TodoTableViewCell: UITableViewCell {
     private let calendarImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(systemName: "Calendar")
+        imageView.image = UIImage(named: "Calendar")
         return imageView
     }()
     
@@ -100,7 +100,7 @@ class TodoTableViewCell: UITableViewCell {
         }
         
         if item.isComplete {
-            checkBox.image = UIImage(systemName: "is_done")
+            checkBox.image = UIImage(named: "is_done")
             
             let attributeString = NSMutableAttributedString(string: item.text)
             attributeString.addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: NSMakeRange(0,attributeString.length))
